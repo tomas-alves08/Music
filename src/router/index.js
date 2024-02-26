@@ -2,22 +2,39 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
 import Manage from '@/components/Manage.vue'
+import useUserStore from '@/stores/user'
 
 const routes = [
   {
-    name:"home",
+    name: 'home',
     path: '/',
     component: Home
   },
   {
-    name:"about",
+    name: 'about',
     path: '/about',
     component: About
   },
   {
-    name:"manage",
+    name: 'manage',
+    // alias: '/manage',
+    path: '/manage-music',
+    component: Manage,
+    // beforeEnter: (to, from, next) => {
+    //   console.log('MAnage Route Guard')
+    //   next()
+    // },
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/manage',
-    component: Manage
+    redirect: { name: 'manage' }
+  },
+  {
+    path: '/:catchAll(.*)*',
+    redirect: { name: 'home' }
   }
 ]
 
@@ -25,6 +42,22 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
   linkExactActiveClass: 'text-yellow-500'
+})
+
+router.beforeEach((to, from, next) => {
+  // console.log(to.meta)
+  if (!to.meta.requiresAuth) {
+    next()
+    return
+  }
+
+  const store = useUserStore()
+
+  if (store.userLoggedIn) {
+    next()
+  } else {
+    next({ name: 'home' })
+  }
 })
 
 export default router
