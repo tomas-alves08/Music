@@ -70,8 +70,8 @@ export default {
     addSong(doc) {
       console.log(doc)
       const song = {
-        ...doc.data(),
-        docID: doc.id
+        docID: doc.id,
+        ...doc.data()
       }
 
       this.songs.push(song)

@@ -58,8 +58,10 @@ export default {
         ? [...$event.dataTransfer.files]
         : [...$event.target.files]
 
+      console.log(files[0].type)
+
       files.forEach((file) => {
-        if (file.type !== 'image/png') {
+        if (file.type !== 'audio/mpeg') {
           return
         }
         const storageRef = storage.ref() //music-6704b.appspot.com
