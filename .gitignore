@@ -29,3 +29,4 @@ firebase.js
 *.sw?
 
 *.tsbuildinfo
+.vercel
